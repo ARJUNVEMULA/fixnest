@@ -1,4 +1,4 @@
-fastapi
+ hofastapi
 uvicorn
 sqlalchemy
 pydantic
@@ -7,3 +7,5 @@ python-jose[cryptography]
 python-multipart
 celery
 redis
+openpyxl
+
