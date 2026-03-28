@@ -1,4 +1,4 @@
- hofastapi
+fastapi
 uvicorn
 sqlalchemy
 pydantic
