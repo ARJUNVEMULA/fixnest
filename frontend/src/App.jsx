@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { API_URL, login, getMe, getBookings, getServices, raiseComplaint, sendOtp, verifyOtp, registerCustomer, getApartments, getBlocks, addApartment, addBlock, triggerScheduler, getWorkers, getAdminWorkers, getAdminCustomers, getAdminAnnouncements, getAdminMaintenance, getAttendance, markAttendance, createVisitorPass, getMyVisitors, verifyVisitorPass, extendVisitorStay, getVisitorStats, getActiveVisitors, getServiceCategories, adminCreateCategory, adminUpdateCategory, adminDeleteCategory, getServiceBanners, adminCreateBanner, adminDeleteBanner, getServiceStats, adminUpdateStats, uploadFile, adminCreateSubCategory, adminUpdateSubCategory, adminDeleteSubCategory, adminCreateServiceType, adminUpdateServiceType, adminDeleteServiceType, adminCreateExtraService, adminUpdateExtraService, adminDeleteExtraService, getMyWorkerProfile, updateWorkerProfile } from './api';
+import { API_URL, login, getMe, getBookings, getServices, raiseComplaint, sendOtp, verifyOtp, registerCustomer, getApartments, getBlocks, addApartment, addBlock, triggerScheduler, getWorkers, getAdminWorkers, getAdminCustomers, getAdminAnnouncements, getAdminMaintenance, getAttendance, markAttendance, createVisitorPass, getMyVisitors, verifyVisitorPass, extendVisitorStay, getVisitorStats, getActiveVisitors, getServiceCategories, adminCreateCategory, adminUpdateCategory, adminDeleteCategory, getServiceBanners, adminCreateBanner, adminDeleteBanner, getServiceStats, adminUpdateStats, uploadFile, adminCreateSubCategory, adminUpdateSubCategory, adminDeleteSubCategory, adminCreateServiceType, adminUpdateServiceType, adminDeleteServiceType, adminCreateExtraService, adminUpdateExtraService, adminDeleteExtraService, getMyWorkerProfile, updateWorkerProfile, getAbsUrl } from './api';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
@@ -1571,7 +1571,7 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
                     <p style={{ margin: '0 0 0.5rem', fontSize: '0.82rem', color: '#475569' }}>{r.description || 'No description.'}</p>
                     {r.image_url && (
                       <div style={{ marginBottom: "0.75rem" }}>
-                        <img src={`${r.image_url}`} alt="issue" style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px", border: "1px solid #e2e8f0", cursor: "pointer" }} onClick={() => window.open(`${r.image_url}`, "_blank")} />
+                        <img src={getAbsUrl(r.image_url)} alt="issue" style={{ width: "100px", height: "100px", objectFit: "cover", borderRadius: "8px", border: "1px solid #e2e8f0", cursor: "pointer" }} onClick={() => window.open(getAbsUrl(r.image_url), "_blank")} />
                       </div>
                     )}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.72rem', color: '#94a3b8' }}>
@@ -1841,7 +1841,7 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
                 ) : extraCart.map((item, idx) => (
                   <div key={idx} style={{ display: 'flex', gap: '1.31rem', padding: '1.36rem', background: '#fff', borderRadius: '24px', border: '1.5px solid #f1f5f9', boxShadow: '0 20px 30px -15px rgba(0,0,0,0.06)', animation: 'fadeIn 0.5s ease-out' }}>
                     <div style={{ width: '80px', height: '80px', borderRadius: '18px', background: '#f8fafc', overflow: 'hidden', flexShrink: 0, border: '1px solid #edf2f7' }}>
-                      {item.image_url ? <img src={item.image_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>💼</div>}
+                      {item.image_url ? <img src={getAbsUrl(item.image_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} /> : <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>💼</div>}
                     </div>
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                       <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.3rem' }}>{item.title}</h4>
@@ -1992,7 +1992,7 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
                           background: '#f8fafc', padding: '15px', border: '1.5px solid #edf2f7', overflow: 'hidden',
                           display: 'flex', alignItems: 'center', justifyContent: 'center'
                         }}>
-                          <img src={`${cat.image_url}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt={cat.name} />
+                          <img src={getAbsUrl(cat.image_url)} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt={cat.name} />
                         </div>
                         <span style={{ fontSize: '0.9rem', fontWeight: 750, color: '#1e293b', display: 'block', lineHeight: '1.3' }}>{cat.name}</span>
                       </div>
@@ -2010,7 +2010,7 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
                       boxShadow: '0 15px 30px -5px rgba(0,0,0,0.06)', transition: 'transform 0.3s',
                       aspectRatio: '1/1'
                     }} className="hover-lift">
-                      <img src={`${b.image_url}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="banner" />
+                      <img src={getAbsUrl(b.image_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="banner" />
                     </div>
                   ))}
                 </div>
@@ -2096,7 +2096,7 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
                             </div>
                             {sub.image_url && (
                               <div style={{ width: '50px', height: '50px', borderRadius: '14px', overflow: 'hidden', background: 'rgba(255,255,255,0.8)', padding: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(255,255,255,0.5)' }}>
-                                <img src={sub.image_url} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="sub-icon" />
+                                <img src={getAbsUrl(sub.image_url)} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="sub-icon" />
                               </div>
                             )}
                           </div>
@@ -2178,7 +2178,7 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
                             display: 'flex', alignItems: 'center', justifyContent: 'center'
                           }}>
                             {svc.image_url ? (
-                              <img src={svc.image_url} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={svc.title} />
+                              <img src={getAbsUrl(svc.image_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt={svc.title} />
                             ) : (
                               <span style={{ fontSize: '2rem' }}>🧰</span>
                             )}
@@ -4833,7 +4833,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                         </td>
                         <td style={{ padding: '1rem 0.75rem' }}>
                           {r.image_url ? (
-                            <a href={`${r.image_url}`} target="_blank" rel="noreferrer" style={{ color: '#3b5bdb', fontSize: '0.75rem', fontWeight: 700, textDecoration: 'underline' }}>View Photo</a>
+                            <a href={getAbsUrl(r.image_url)} target="_blank" rel="noreferrer" style={{ color: '#3b5bdb', fontSize: '0.75rem', fontWeight: 700, textDecoration: 'underline' }}>View Photo</a>
                           ) : (
                             <span style={{ color: '#94a3b8', fontSize: '0.75rem' }}>N/A</span>
                           )}
@@ -4917,7 +4917,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', maxWidth: '400px' }}>
                         {extraBanners.slice(0, 4).map(b => (
                           <div key={b.id} style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', border: '1.5px solid #edf2f7', aspectRatio: '1/1' }}>
-                            <img src={`${b.image_url}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="banner" />
+                            <img src={getAbsUrl(b.image_url)} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="banner" />
                             <button
                               onClick={async (e) => { e.stopPropagation(); if (confirm("Delete banner?")) { try { await adminDeleteBanner(token, b.id); setExtraBanners(await getServiceBanners()); } catch (e) { alert(e.message); } } }}
                               style={{ position: 'absolute', top: '10px', right: '10px', background: '#ef4444', color: '#fff', border: 'none', width: '24px', height: '24px', borderRadius: '50%', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '14px' }}
@@ -4981,7 +4981,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                           <button onClick={async (e) => { e.stopPropagation(); if (confirm("Delete category?")) { try { await adminDeleteCategory(token, cat.id); setExtraCats(await getServiceCategories()); } catch (err) { alert(err.message); } } }} style={{ background: '#fff1f2', border: '1px solid #fee2e2', padding: '5px', borderRadius: '8px', cursor: 'pointer' }}>🗑️</button>
                         </div>
                         <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: '#f8fafc', marginBottom: '1rem', overflow: 'hidden' }}>
-                          <img src={`${cat.image_url}`} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="cat" />
+                          <img src={getAbsUrl(cat.image_url)} style={{ width: '100%', height: '100%', objectFit: 'contain' }} alt="cat" />
                         </div>
                         <h4 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#1e293b' }}>{cat.name}</h4>
                         <p style={{ fontSize: '0.75rem', color: '#64748b' }}>Configure Hierarchy &rsaquo;</p>
@@ -5094,7 +5094,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                     >
                       {extraForm.image_url ? (
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem' }}>
-                          <img src={extraForm.image_url} style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'contain' }} alt="icon preview" />
+                          <img src={getAbsUrl(extraForm.image_url)} style={{ width: '40px', height: '40px', borderRadius: '8px', objectFit: 'contain' }} alt="icon preview" />
                           <div style={{ textAlign: 'left' }}>
                             <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#1e293b' }}>✓ Icon Locked</div>
                             <div style={{ fontSize: '0.65rem', color: '#94a3b8' }}>Click to replace</div>
@@ -5163,7 +5163,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                       style={{ padding: '1rem', border: '2px dashed #e2e8f0', borderRadius: '12px', background: '#f8fafc', textAlign: 'center', cursor: 'pointer' }}
                     >
                       {subFormExtra.image_url ? (
-                        <img src={subFormExtra.image_url} style={{ height: '32px', borderRadius: '4px' }} alt="preview" />
+                        <img src={getAbsUrl(subFormExtra.image_url)} style={{ height: '32px', borderRadius: '4px' }} alt="preview" />
                       ) : (
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>+ Upload Asset</span>
                       )}
@@ -5208,7 +5208,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                       style={{ padding: '1rem', border: '2px dashed #e2e8f0', borderRadius: '12px', background: '#f8fafc', textAlign: 'center', cursor: 'pointer' }}
                     >
                       {typeFormExtra.image_url ? (
-                        <img src={typeFormExtra.image_url} style={{ height: '32px', borderRadius: '4px' }} alt="preview" />
+                        <img src={getAbsUrl(typeFormExtra.image_url)} style={{ height: '32px', borderRadius: '4px' }} alt="preview" />
                       ) : (
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>+ Upload Icon</span>
                       )}
@@ -5263,7 +5263,7 @@ const AdminDashboard = ({ token, complaints, bookings = [], reloadBookings, logo
                       style={{ padding: '1rem', border: '2px dashed #e2e8f0', borderRadius: '12px', background: '#f8fafc', textAlign: 'center', cursor: 'pointer' }}
                     >
                       {serviceFormExtra.image_url ? (
-                        <img src={serviceFormExtra.image_url} style={{ height: '32px', borderRadius: '4px' }} alt="preview" />
+                        <img src={getAbsUrl(serviceFormExtra.image_url)} style={{ height: '32px', borderRadius: '4px' }} alt="preview" />
                       ) : (
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8' }}>+ Upload Service Photo</span>
                       )}

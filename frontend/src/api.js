@@ -1,5 +1,5 @@
 export const API_URL = (import.meta.env.VITE_API_URL || '') + '/api';
-
+export const getAbsUrl = (url) => { if (!url) return ''; if (url.startsWith('http')) return url; return url.startsWith('/uploads') ? API_URL.replace('/api', '') + url : url; };
 export const login = async (email, password) => {
   const formData = new URLSearchParams();
   formData.append('username', email);
