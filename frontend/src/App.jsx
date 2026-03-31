@@ -91,6 +91,7 @@ const THEMES = {
 
 const Auth = ({ setToken }) => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -137,6 +138,7 @@ const Auth = ({ setToken }) => {
 
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const data = await login(identifier, password);
       localStorage.setItem('fixnest_token', data.access_token);
@@ -144,6 +146,8 @@ const Auth = ({ setToken }) => {
       setToken(data.access_token);
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -168,6 +172,7 @@ const Auth = ({ setToken }) => {
 
   const handleSignupSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await registerCustomer({
         mobile_number: mobileNumber,
@@ -183,6 +188,8 @@ const Auth = ({ setToken }) => {
       setError('Account created! Please use your Flat ID / Mobile to login.');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -211,7 +218,7 @@ const Auth = ({ setToken }) => {
               <label>Password</label>
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
             </div>
-            <button type="submit" className="btn">Sign In</button>
+            <button type="submit" className="btn" disabled={isLoading}>{isLoading ? 'Loading...' : 'Sign In'}</button>
           </form>
         ) : (
           <div>
@@ -279,7 +286,7 @@ const Auth = ({ setToken }) => {
                 </div>
                 <div style={{ display: 'flex', gap: '1rem' }}>
                   <button type="button" className="btn" style={{ background: 'gray' }} onClick={() => setSignupStep(2)}>Back</button>
-                  <button type="submit" className="btn" style={{ background: 'var(--success)' }}>Create Profile</button>
+                  <button type="submit" className="btn" disabled={isLoading} style={{ background: 'var(--success)', opacity: isLoading ? 0.7 : 1 }}>{isLoading ? 'Creating...' : 'Create Profile'}</button>
                 </div>
               </form>
             )}
