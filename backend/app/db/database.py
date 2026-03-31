@@ -1,13 +1,16 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from dotenv import load_dotenv
 import os
 
-os.makedirs("app/db/data", exist_ok=True)
-SQLALCHEMY_DATABASE_URL = "sqlite:///./app/db/data/fixnest.db"
+# Load environment variables from .env file, forcing it to override
+load_dotenv(override=True)
 
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Engine creation for PostgreSQL (no check_same_thread needed)
+engine = create_engine(DATABASE_URL)
+
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
