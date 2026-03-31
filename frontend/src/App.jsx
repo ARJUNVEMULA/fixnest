@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import { API_URL, login, getMe, getBookings, getServices, raiseComplaint, sendOtp, verifyOtp, registerCustomer, getApartments, getBlocks, addApartment, addBlock, triggerScheduler, getWorkers, getAdminWorkers, getAdminCustomers, getAdminAnnouncements, getAdminMaintenance, getAttendance, markAttendance, createVisitorPass, getMyVisitors, verifyVisitorPass, extendVisitorStay, getVisitorStats, getActiveVisitors, getServiceCategories, adminCreateCategory, adminUpdateCategory, adminDeleteCategory, getServiceBanners, adminCreateBanner, adminDeleteBanner, getServiceStats, adminUpdateStats, uploadFile, adminCreateSubCategory, adminUpdateSubCategory, adminDeleteSubCategory, adminCreateServiceType, adminUpdateServiceType, adminDeleteServiceType, adminCreateExtraService, adminUpdateExtraService, adminDeleteExtraService } from './api';
+import { API_URL, login, getMe, getBookings, getServices, raiseComplaint, sendOtp, verifyOtp, registerCustomer, getApartments, getBlocks, addApartment, addBlock, triggerScheduler, getWorkers, getAdminWorkers, getAdminCustomers, getAdminAnnouncements, getAdminMaintenance, getAttendance, markAttendance, createVisitorPass, getMyVisitors, verifyVisitorPass, extendVisitorStay, getVisitorStats, getActiveVisitors, getServiceCategories, adminCreateCategory, adminUpdateCategory, adminDeleteCategory, getServiceBanners, adminCreateBanner, adminDeleteBanner, getServiceStats, adminUpdateStats, uploadFile, adminCreateSubCategory, adminUpdateSubCategory, adminDeleteSubCategory, adminCreateServiceType, adminUpdateServiceType, adminDeleteServiceType, adminCreateExtraService, adminUpdateExtraService, adminDeleteExtraService, getMyWorkerProfile, updateWorkerProfile } from './api';
 import { QRCodeCanvas } from 'qrcode.react';
 import { Html5QrcodeScanner } from 'html5-qrcode';
 
@@ -2586,7 +2586,7 @@ const WorkerDashboard = ({ token, bookings, complaints, services, logout }) => {
                         <h3>Ticket #{b.id}</h3>
                         <span className={`status-badge status-${b.status}`}>{b.status}</span>
                       </div>
-                      <p><strong>Service:</strong> {b.service_id.toUpperCase()}</p>
+                      <p><strong>Service:</strong> {String(b.service_id).toUpperCase()}</p>
                       <p><strong>Location:</strong> {b.location}</p>
                       <button className="btn" style={{ marginTop: '1rem' }} onClick={() => setSection('tasks')}>View Details</button>
                     </div>
@@ -2644,7 +2644,7 @@ const WorkerDashboard = ({ token, bookings, complaints, services, logout }) => {
                   <span className={`status-badge status-${c.status}`}>{c.status}</span>
                   <p style={{ marginTop: "1rem" }}><strong>Type:</strong> {c.complaint_type.toUpperCase()}</p>
                   <p><strong>Description:</strong> {c.description}</p>
-                  <p style={{ color: '#be123c', fontWeight: 'bold', marginTop: '0.5rem' }}>Priority: {c.priority.toUpperCase()}</p>
+                  <p style={{ color: '#be123c', fontWeight: 'bold', marginTop: '0.5rem' }}>Priority: {String(c.priority).toUpperCase()}</p>
                   <button className="btn" style={{ background: '#be123c', marginTop: '1.5rem', width: '100%' }} onClick={() => alert('Incident log locked.')}>Acknowledge & Resolve</button>
                 </div>
               ))}
