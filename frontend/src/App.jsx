@@ -1077,6 +1077,7 @@ const SecurityVMS = ({ token }) => {
 // 1. CUSTOMER PORTAL
 const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) => {
   const [section, setSection] = React.useState('dashboard');
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [profile, setProfile] = React.useState({
     username: user.username || '',
     mobile_number: user.mobile_number || '',
@@ -1285,36 +1286,50 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
   const avatarSrc = profile.profile_photo ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.username || 'R')}&background=c7d2fe&color=1e3a8a&size=200`;
 
-  const Sidebar = () => {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-    return (
+  const Sidebar = () => (
     <>
+      {/* Mobile-only top header with hamburger */}
       <div className="mobile-top-header">
-        <button className="hamburger-btn" onClick={() => setIsMenuOpen(true)}>
-          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        <button className="hamburger-btn" onClick={() => setIsMenuOpen(true)} aria-label="Open menu">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
         </button>
         <div className="cd-logo mobile-only-logo">
-          <img src="/new_logo.png" alt="FixNest logo" className="cd-logo-img" style={{width: 32, height: 32}} />
+          <img src="/new_logo.png" alt="FixNest logo" className="cd-logo-img" style={{width: 34, height: 34}} />
           <span className="cd-logo-text" style={{fontSize: '1.2rem', color: '#1e3a8a', fontWeight: 800}}>FixNest</span>
         </div>
       </div>
-      
-      {isMenuOpen && <div className="mobile-menu-backdrop" onClick={() => setIsMenuOpen(false)}></div>}
 
+      {/* Dark backdrop — always rendered, opacity/pointer-events controlled by class */}
+      <div
+        className={`mobile-menu-backdrop ${isMenuOpen ? 'active' : ''}`}
+        onClick={() => setIsMenuOpen(false)}
+      />
+
+      {/* Slide-in drawer */}
       <aside className={`cd-sidebar cd-drawer ${isMenuOpen ? 'open' : ''}`}>
+
+        {/* Desktop logo (hidden on mobile by CSS) */}
         <div className="cd-logo desktop-only-logo">
           <img src="/new_logo.png" alt="FixNest logo" className="cd-logo-img" />
           <span className="cd-logo-text">FixNest</span>
         </div>
-        
+
+        {/* Drawer profile header — dashboard blue/indigo theme */}
         <div className="drawer-profile-bg">
-          <button className="drawer-close-btn" onClick={() => setIsMenuOpen(false)}>&times;</button>
-          <img className="cd-profile-avatar" src={avatarSrc} alt="avatar" style={{width: '70px', height: '70px', border: '3px solid white', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', objectFit: 'cover'}} />
-          <h3 style={{margin: '0.8rem 0 0.2rem', color: '#fff', fontSize: '1.2rem', fontWeight: 800, textShadow: '0 1px 2px rgba(0,0,0,0.1)'}}>{profile.username || 'Resident'}</h3>
-          <p style={{margin: 0, color: 'rgba(255,255,255,0.95)', fontSize: '0.9rem', fontWeight: 600}}>{profile.mobile_number}</p>
-          <p style={{margin: '0.3rem 0 0', color: 'rgba(255,255,255,0.85)', fontSize: '0.8rem'}}>{user.flat_id || 'Flat 402'} &middot; Resident</p>
+          <button className="drawer-close-btn" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">&times;</button>
+          <div className="drawer-avatar-ring">
+            <img src={avatarSrc} alt="avatar" className="drawer-avatar-img" />
+          </div>
+          <h3 className="drawer-profile-name">{profile.username || 'Resident'}</h3>
+          <p className="drawer-profile-mobile">{profile.mobile_number}</p>
+          <span className="drawer-flat-badge">{user.flat_id || 'Flat 402'} &middot; Resident</span>
         </div>
 
+        {/* Desktop profile block (hidden on mobile) */}
         <div className="cd-profile-block">
           <img className="cd-profile-avatar" src={avatarSrc} alt="avatar" />
           <div className="cd-profile-text">
@@ -1323,7 +1338,9 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
           </div>
         </div>
 
+        {/* Search box */}
         <div className="drawer-search">
+          <svg className="drawer-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
           <input type="text" placeholder="Search menu..." />
         </div>
 
@@ -1373,16 +1390,20 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
           {t('contact')}
         </a>
       </nav>
+
+      {/* Desktop sign-out button */}
       <button className="cd-concierge-btn" style={{ marginTop: '0.75rem', background: '#fee2e2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={logout}>
         {t('signout')}
       </button>
 
+      {/* Mobile drawer logout */}
       <button className="drawer-logout-btn" onClick={logout}>
-        LOGOUT <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
+        Sign Out
       </button>
     </aside>
     </>
-  )};
+  );
 
   const Topbar = () => (
     <header className="cd-topbar">
