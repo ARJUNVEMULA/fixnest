@@ -1285,20 +1285,49 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
   const avatarSrc = profile.profile_photo ||
     `https://ui-avatars.com/api/?name=${encodeURIComponent(profile.username || 'R')}&background=c7d2fe&color=1e3a8a&size=200`;
 
-  const Sidebar = () => (
-    <aside className="cd-sidebar">
-      <div className="cd-logo">
-        <img src="/new_logo.png" alt="FixNest logo" className="cd-logo-img" />
-        <span className="cd-logo-text">FixNest</span>
-      </div>
-      <div className="cd-profile-block">
-        <img className="cd-profile-avatar" src={avatarSrc} alt="avatar" />
-        <div className="cd-profile-text">
-          <span className="cd-profile-unit">{user.flat_id || 'Unit 402'} &middot; Premium Wing</span>
-          <span className="cd-profile-role">RESIDENT</span>
+  const Sidebar = () => {
+    const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+    return (
+    <>
+      <div className="mobile-top-header">
+        <button className="hamburger-btn" onClick={() => setIsMenuOpen(true)}>
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <div className="cd-logo mobile-only-logo">
+          <img src="/new_logo.png" alt="FixNest logo" className="cd-logo-img" style={{width: 32, height: 32}} />
+          <span className="cd-logo-text" style={{fontSize: '1.2rem', color: '#1e3a8a', fontWeight: 800}}>FixNest</span>
         </div>
       </div>
-      <nav className="cd-nav">
+      
+      {isMenuOpen && <div className="mobile-menu-backdrop" onClick={() => setIsMenuOpen(false)}></div>}
+
+      <aside className={`cd-sidebar cd-drawer ${isMenuOpen ? 'open' : ''}`}>
+        <div className="cd-logo desktop-only-logo">
+          <img src="/new_logo.png" alt="FixNest logo" className="cd-logo-img" />
+          <span className="cd-logo-text">FixNest</span>
+        </div>
+        
+        <div className="drawer-profile-bg">
+          <button className="drawer-close-btn" onClick={() => setIsMenuOpen(false)}>&times;</button>
+          <img className="cd-profile-avatar" src={avatarSrc} alt="avatar" style={{width: '70px', height: '70px', border: '3px solid white', boxShadow: '0 4px 10px rgba(0,0,0,0.1)', objectFit: 'cover'}} />
+          <h3 style={{margin: '0.8rem 0 0.2rem', color: '#fff', fontSize: '1.2rem', fontWeight: 800, textShadow: '0 1px 2px rgba(0,0,0,0.1)'}}>{profile.username || 'Resident'}</h3>
+          <p style={{margin: 0, color: 'rgba(255,255,255,0.95)', fontSize: '0.9rem', fontWeight: 600}}>{profile.mobile_number}</p>
+          <p style={{margin: '0.3rem 0 0', color: 'rgba(255,255,255,0.85)', fontSize: '0.8rem'}}>{user.flat_id || 'Flat 402'} &middot; Resident</p>
+        </div>
+
+        <div className="cd-profile-block">
+          <img className="cd-profile-avatar" src={avatarSrc} alt="avatar" />
+          <div className="cd-profile-text">
+            <span className="cd-profile-unit">{user.flat_id || 'Unit 402'} &middot; Premium Wing</span>
+            <span className="cd-profile-role">RESIDENT</span>
+          </div>
+        </div>
+
+        <div className="drawer-search">
+          <input type="text" placeholder="Search menu..." />
+        </div>
+
+        <nav className="cd-nav" onClick={() => setIsMenuOpen(false)}>
         <a href="#dashboard" onClick={e => navTo('dashboard', e)} className={`cd-nav-item${section === 'dashboard' ? ' cd-nav-active' : ''}`}>
           <svg className="cd-nav-icon" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></svg>
           {t('overview')}
@@ -1347,8 +1376,13 @@ const CustomerDashboard = ({ user, token, logout, complaints, reloadBookings }) 
       <button className="cd-concierge-btn" style={{ marginTop: '0.75rem', background: '#fee2e2', color: '#ef4444', border: '1px solid #fecaca' }} onClick={logout}>
         {t('signout')}
       </button>
+
+      <button className="drawer-logout-btn" onClick={logout}>
+        LOGOUT <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9" /></svg>
+      </button>
     </aside>
-  );
+    </>
+  )};
 
   const Topbar = () => (
     <header className="cd-topbar">
